@@ -1,10 +1,10 @@
 #Research Project MAPS
 
 #Package loading
-library(haven)
-library(dplyr)
-library(lavaan)
-library(psych)
+if (!require(haven)){install.packages("haven")};library(haven)
+if (!require(dplyr)){install.packages("dplyr")};library(dplyr)
+if (!require(lavaan)){install.packages("lavaan")};library(lavaan)
+if (!require(psych)){install.packages("psych")};library(psych)
 
 #Data loading
 MAPS <- read_sav("S:/Ellman_Group/MAPstudy/Data/Master Data/CurrentMasterFile/MAPS_Multisite_Master_Data_Set_04.22.2022.sav")
@@ -18,7 +18,7 @@ MAPS <- read_sav("S:/Ellman_Group/MAPstudy/Data/Master Data/CurrentMasterFile/MA
         
       #CTQ 
         CTQ <- MAPS %>% as_tibble %>% select(starts_with("T2_CTQ"))
-        alpha(CTQ, cumulative = TRUE, check.keys = TRUE)
+        psych::alpha(CTQ, cumulative = TRUE, check.keys = TRUE)
         
       #Get counts for each group
         CD <- MAPS %>% filter( SIPS_CHR == 1 & (scid_p21 == 3 | scid_p23 == 3))
