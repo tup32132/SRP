@@ -13,11 +13,11 @@ MAPS <- read_sav("S:/Ellman_Group/MAPstudy/Data/Master Data/CurrentMasterFile/MA
       #remove NAs
         MAPS <- MAPS %>% filter(!is.na(SIPS_CHR))
         MAPS <- MAPS %>% filter(!is.na(DUF_17))
-        MAPS<- MAPS %>% filter(!is.na(scid_p22))
+        MAPS <- MAPS %>% filter(!is.na(scid_p22))
         MAPS <- MAPS %>% filter(!is.na(scid_p24))
         
       #CTQ 
-        CTQ <- t2 %>% as_tibble %>% select(starts_with("T2_CTQ"))
+        CTQ <- MAPS %>% as_tibble %>% select(starts_with("T2_CTQ"))
         alpha(CTQ, cumulative = TRUE, check.keys = TRUE)
         
       #Get counts for each group
@@ -33,6 +33,8 @@ MAPS <- read_sav("S:/Ellman_Group/MAPstudy/Data/Master Data/CurrentMasterFile/MA
         dx <- MAPS %>% dplyr::filter(!is.na(scid_total)) %>% dplyr::filter(scid_total< 283)
         
         control <- dx %>% data.frame() %>% filter((scid_total== 94))
+        
+        
         
 
         
