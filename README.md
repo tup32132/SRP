@@ -2,7 +2,7 @@
 
 This is my first repository. What I have learned so far?
 
-0. **ALWAYS** remember to pull changes from the remote repository before you start working
+0. **ALWAYS remember to pull changes from the remote repository before you start working**
 
 ```git pull```
 
