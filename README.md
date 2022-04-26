@@ -3,6 +3,7 @@
 This is my first repository. What I have learned so far?
 
 0. **ALWAYS** remember to pull changes from the remote repository before you start working
+
 ```git pull```
 
 1. Add files to staging area
