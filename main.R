@@ -14,5 +14,11 @@ if(!require(psych)) {install.packages("psych")}; library(psych)
 # note: this takes FOREVER! only load this once :)
 source("import.R")
 
+#Once importing SPSS dataset, run here and below 
+
 # data cleaning
-source("SRP.R")
+source("fn.R")
+#call functions
+removeNa()
+extractCTQ()
+summarizeSCID()
