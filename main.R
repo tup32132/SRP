@@ -1,0 +1,18 @@
+# Research Project MAPS
+# Analyze CTQ in relationship to various SCID dx
+
+# clear environment
+rm(list=ls())
+
+# Package loading
+if(!require(haven)) {install.packages("haven")}; library(haven)
+if(!require(dplyr)) {install.packages("dplyr")}; library(dplyr)
+if(!require(lavaan)){install.packages("lavaan")};library(lavaan)
+if(!require(psych)) {install.packages("psych")}; library(psych)
+
+# import SPSS master data file for MAPS
+# note: this takes FOREVER! only load this once :)
+source("import.R")
+
+# data cleaning
+source("SRP.R")
