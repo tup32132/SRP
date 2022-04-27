@@ -9,7 +9,8 @@ if(!require(haven)) {install.packages("haven")}; library(haven)
 if(!require(dplyr)) {install.packages("dplyr")}; library(dplyr)
 if(!require(lavaan)){install.packages("lavaan")};library(lavaan)
 if(!require(psych)) {install.packages("psych")}; library(psych)
-
+if(!require(car)) {install.packages("car")}; library(pcar)
+                                                         
 # import SPSS master data file for MAPS
 # note: this takes FOREVER! only load this once :)
 source("import.R")
