@@ -22,4 +22,5 @@ source("fn.R")
 #call functions
 removeNa()
 recodeCTQ()
+splitMAPS()
 summarizeSCID()
