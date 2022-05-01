@@ -3,34 +3,30 @@ removeNa <- function() {
   #remove NAs
   MAPS <- MAPS %>% filter(!is.na(SIPS_CHR))
   MAPS <- MAPS %>% filter(!is.na(scid_p117))
-  MAPS <- MAPS %>% filter(!is.na(scid_p118)) 
-
-  }
-
   
-
-#get summary variables
-summarizeSCID <- function() {
+#subset to remove '99s, subthresholds
+  MAPS <- subset(MAPS, scid_p117 != 2) 
+  MAPS <- subset(MAPS, scid_p117 != 99) 
+  MAPS <- subset(MAPS, scid_p52 != 2) #no 99s, no need to filter the rest of way
+  MAPS <- subset(MAPS, scid_p50 != 2) #sedative-anxiolytic
+  MAPS <- subset(MAPS, scid_p54 != 2) #stimulant/cocaine
+  MAPS <- subset(MAPS, scid_p56 != 2) #Opioids
+  #PCP not included, no one with this dx in dataset
+  MAPS <- subset(MAPS, scid_p60 != 2) #Hallucinogens
+  MAPS <- subset(MAPS, scid_p60 !=99)
+  MAPS <- subset(MAPS, scid_p62 != 2) #Inhalants
+  MAPS <- subset(MAPS, scid_p64 != 2) #other drugs
   
-  # Get counts for each group
-  CHRPTSD  <- MAPS %>% filter(SIPS_CHR == 1 & (scid_p117 == 3 | scid_p118 == 3))
-  CHRnPTSD <- MAPS %>% filter(SIPS_CHR == 1 & (scid_p117 != 3 | scid_p118 != 3))
-  nCHRPTSD <- MAPS %>% filter(SIPS_CHR != 1 & (scid_p117 == 3 | scid_p118 == 3))
   
-  # get some supercontrols (zero scid dx lifetime)
-  MAPS$scid_total <- rowSums((MAPS %>% select(scid_p8,scid_p9,scid_p11:scid_p12,scid_p14:scid_p18,scid_p19:scid_p20,scid_p21:scid_p29,
-                                              scid_p30:scid_p31,scid_p32:scid_p43,scid_p44:scid_p45,scid_p46:scid_p80,scid_p81:scid_p82,
-                                              scid_p83:scid_p96,scid_p97:scid_p98,scid_p102:scid_p122)))
+  #group for all dx other than cannabis 
+  MAPS$other_drug <- MAPS$scid_p50 + MAPS$scid_p54 + MAPS$scid_p56 + MAPS$scid_p60 + MAPS$scid_p62 + MAPS$scid_p64
   
-  # create dataframe for clinical dx
-  sumof99 <- 283
-  dx <- MAPS %>% dplyr::filter(!is.na(scid_total)) %>% dplyr::filter(scid_total< sumof99)
-  
-  # filters
-  sumOfNeverDiagnosed <- 94 # sum of all SCID items equals 94
-  control <- dx %>% data.frame() %>% filter((scid_total== sumOfNeverDiagnosed))
+  MAPS$other_drug <- ifelse(MAPS$other_drug == 6, 1, 3)
+            
   
 }
+    
+
 
 recodeCTQ <- function() {
    #T2 CTQ includes all items
@@ -87,8 +83,36 @@ recodeCTQ <- function() {
     MAPS <- mutate(MAPS, T1_CTQ_PN_total= CTQ_1 + as.numeric(CTQ_2r) + CTQ_6 + as.numeric(CTQ_26r))
  
   #creating total score
-    MAPS <- mutate(MAPS, CTQ, T1_CTQ_total= T1_CTQ_EA_total + T1_CTQ_EN_total + T1_CTQ_PN_total)
+    
+    MAPS <- mutate(MAPS, T1_CTQ_total= T1_CTQ_EA_total + T1_CTQ_EN_total + T1_CTQ_PN_total)
+    
+  #remove 99s
+    CTQmax <- 81
+    MAPS <- subset(MAPS, T1_CTQ_total < CTQmax)
 
+}
+
+#get summary variables
+summarizeSCID <- function() {
+  
+  # Get counts for each group
+  CHRPTSD  <- MAPS %>% filter(SIPS_CHR == 1 & (scid_p117 == 3 ))
+  CHRnPTSD <- MAPS %>% filter(SIPS_CHR == 1 & (scid_p117 != 3 ))
+  nCHRPTSD <- MAPS %>% filter(SIPS_CHR != 1 & (scid_p117 == 3 ))
+  
+  # get some supercontrols (zero scid dx lifetime)
+  MAPS$scid_total <- rowSums((MAPS %>% select(scid_p8,scid_p9,scid_p11:scid_p12,scid_p14:scid_p18,scid_p19:scid_p20,scid_p21:scid_p29,
+                                              scid_p30:scid_p31,scid_p32:scid_p43,scid_p44:scid_p45,scid_p46:scid_p80,scid_p81:scid_p82,
+                                              scid_p83:scid_p96,scid_p97:scid_p98,scid_p102:scid_p122)))
+  
+  # create dataframe for clinical dx
+  sumof99 <- 283
+  dx <- MAPS %>% dplyr::filter(!is.na(scid_total)) %>% dplyr::filter(scid_total< sumof99)
+  
+  # filters
+  sumOfNeverDiagnosed <- 94 # sum of all SCID items equals 94
+  control <- dx %>% data.frame() %>% filter((scid_total== sumOfNeverDiagnosed))
+  
 }
 
 #subsetting MAPS for one to only include T1 and the other to only include T2, remove NAs
@@ -96,3 +120,4 @@ splitMAPS <- function() {
   MAPST1 <- MAPS %>% filter(!is.na(MAPS$T1_CTQ_total)) 
   MAPST2 <- MAPS %>% filter(!is.na(MAPS$T2_CTQ_total))
 }
+
