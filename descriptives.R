@@ -10,8 +10,8 @@ describe(MAPST1[c("scid_p52", "other_drug", "scid_p117", "T1_CTQ_total","SIPS_CH
 
 #Correlation matrix of variables of interest and any potential covariates 
 apa.cor.table(
-  MAPST1[c("scid_p53", "scid_p52", "T1_CTQ_total", "scid_p117", "SIPS_CHR", "intv_age", "sex")],
-  filename = "CorrelationMatrix_SRP.doc",
+  MAPST1[c("other_drug", "scid_p52", "T1_CTQ_total", "scid_p117", "SIPS_CHR", "intv_age", "sex")],
+  filename = "Correlation_SRP.doc",
   table.number = NA,
   show.conf.interval = FALSE,
   show.sig.stars = TRUE,
